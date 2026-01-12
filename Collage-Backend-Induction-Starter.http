@@ -1,0 +1,6 @@
+@Collage_Backend_Induction_Starter_HostAddress = http://localhost:5262
+
+GET {{Collage_Backend_Induction_Starter_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
