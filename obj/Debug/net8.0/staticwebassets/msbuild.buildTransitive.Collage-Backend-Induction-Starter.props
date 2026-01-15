@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../buildMultiTargeting/Collage-Backend-Induction-Starter.props" />
-</Project>
