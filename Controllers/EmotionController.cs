@@ -5,31 +5,27 @@ namespace Collage.Backend.Induction.Starter.Controllers
 {
     /*
     Validation and guard behaviour must be applied to all of the following (and any more that you have in your induction project):
-    GET /api/movies/scifi
-    GET /api/movies/{movieId}
-    GET /api/movies/{movieId}/recommendations
-    POST /api/movies/{movieId}/emotions
+
     GET /api/emotions
     */
     [ApiController]
     [Route("api/[controller]")]
     public class EmotionsController : ControllerBase
     {
-        private readonly IHealthService _healthService;
+        private readonly IEmotionService _emotionsService;
 
-        public EmotionsController(IHealthService healthService)
+        public EmotionsController(IEmotionService emotionsService)
         {
-            _healthService = healthService;
+            _emotionsService = emotionsService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult Get()
+        public async Task<IActionResult> GetSupportedEmotionTypes()
         {
-            var response = _healthService.GetHealth();
+            var response = await _emotionsService.GetEmotionTypesAsync();
             return Ok(response);
         }
-       
-        
+
     }
 }

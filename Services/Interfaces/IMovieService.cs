@@ -1,0 +1,20 @@
+
+using Models;
+using System.Threading.Tasks;
+using DTOs;
+namespace Collage.Backend.Induction.Starter.Services
+{
+//     GET /api/movies/scifi - movie summaries
+//     GET /api/movies/{movieId} - return movie details
+//     GET /api/movies/{movieId}/recommendations - return movie summaries
+//     POST /api/movies/{movieId}/emotions
+    public interface IMovieService
+    {
+        // Define movie-related service methods here
+        Task<MovieSummaryDto> GetMoviesByGenreAsync(string genre);
+        Task<MovieDetailDto> GetMovieByIdAsync(int movieId);
+        Task<MovieSummaryDto> GetMoviesByIdAndRecommendationsAsync(int movieId);
+        Task<TagEmotionResponseDto> AddEmotionToMovieAsync(TagEmotionRequestDto request);
+
+    }
+}

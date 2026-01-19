@@ -1,61 +1,61 @@
 using Collage.Backend.Induction.Starter.Services;
 using Microsoft.AspNetCore.Mvc;
+using Clients;
+using Models;
+using DTOs;
 
 namespace Collage.Backend.Induction.Starter.Controllers
 {
     /*
     Validation and guard behaviour must be applied to all of the following (and any more that you have in your induction project):
-    GET /api/movies/scifi
-    GET /api/movies/{movieId}
-    GET /api/movies/{movieId}/recommendations
+    GET /api/movies/scifi - movie summaries
+    GET /api/movies/{movieId} - return movie details
+    GET /api/movies/{movieId}/recommendations - return movie summaries
     POST /api/movies/{movieId}/emotions
 
     ref: https://learn.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-10.0
     return type: https://learn.microsoft.com/en-us/aspnet/core/web-api/action-return-types?view=aspnetcore-10.0
+    db: https://github.com/jellyfin/TMDbLib?tab=readme-ov-file
+    API ref: https://developer.themoviedb.org/reference/changes-movie-list
     */
     [ApiController]
     [Route("api/[controller]")]
     public class MoviesController : ControllerBase
     {
-        private readonly IMoviesService _moviesService;
+        private readonly IMovieService _moviesService;
 
-        public MoviesController(IMoviesService moviesService)
+        public MoviesController(IMovieService moviesService)
         {
             _moviesService = moviesService;
         }
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetMoviesHealth()
-        {
-           return Ok();
-        }
-
         [HttpGet("scifi")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetMoviesHealth()
+        public async Task<IActionResult> GetMoviesByGenre()
         {
-             return Ok();  
+            var response = await _moviesService.GetMoviesByGenreAsync("scifi");
+            return Ok(response);
         }
 
         [HttpGet("{movieId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetMoviesHealth()
+        public async Task<IActionResult> GetMovieById(int movieId)
         {
-             return Ok();   
+            var response = await _moviesService.GetMovieByIdAsync(movieId);
+            return Ok(response);
         }
         [HttpGet("{movieId}/recommendations")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetMoviesHealth()
+        public async Task<IActionResult> GetRecommendations(int movieId)
         {
             //var response = _healthService.GetMoviesHealth();
             //return Ok(response);  
              return Ok();  
         }
 
-        [HttpPut("{movieId}/emotions")]
+        [HttpPost("{movieId}/emotions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetMoviesHealth()
+        public IActionResult AddEmotion(int movieId)
         {
              return Ok();
         }

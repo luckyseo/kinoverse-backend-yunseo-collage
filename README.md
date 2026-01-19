@@ -53,6 +53,7 @@ The Health controller, service, and model are provided **purely as a reference e
 They are **not part of your induction assignment submission**.
 
 Use them to understand:
+
 - where logic should live
 - how controllers and services interact
 - how responses are returned
@@ -66,6 +67,7 @@ You should follow the same structure when building your own features.
 These files demonstrate the structure you should follow:
 
 ### 1) `Controllers/HealthController.cs`
+
 - Defines API endpoints (routes)
 - Receives incoming requests
 - Delegates work to the service
@@ -76,12 +78,14 @@ These files demonstrate the structure you should follow:
 ---
 
 ### 2) `Services/IHealthService.cs`
+
 - Defines the service “contract” (what the service promises to do)
 - Allows controllers to depend on an interface rather than an implementation
 
 ---
 
 ### 3) `Services/HealthService.cs`
+
 - Contains the logic (even if minimal)
 - Returns a model that the controller sends back to the client
 
@@ -90,13 +94,16 @@ These files demonstrate the structure you should follow:
 ---
 
 ### 4) `Models/HealthResponse.cs`
+
 - Defines the shape of the JSON response
 - Makes the API output explicit and consistent
 
 ---
 
 ### 5) `Program.cs`
+
 This is where the application is wired together. Pay attention to:
+
 - `AddControllers()` (enables controller-based APIs)
 - `AddSwaggerGen()` (enables Swagger)
 - service registrations (dependency injection), e.g. `AddScoped<...>()`
@@ -141,3 +148,17 @@ Example responses:
 ```
 
 If you can successfully call this endpoint, your local setup is complete.
+
+Handle API KEY - keep it personal
+
+1.dotnet add package DotNetEnv
+
+# Initialize user secrets for your project
+
+2. dotnet user-secrets init
+
+# Add your API key
+
+3. dotnet user-secrets set "TmdbSettings:ApiKey" "your_api_key_here"
+
+4. verify by : dotnet user-secrets list
