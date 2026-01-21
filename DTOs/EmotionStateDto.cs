@@ -7,7 +7,7 @@ namespace DTOs
         public Dictionary<EmotionType, int> Counts { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EmotionType UserEmotion { get; set; }
+        public EmotionType? UserEmotion { get; set; }
     }
 
 }

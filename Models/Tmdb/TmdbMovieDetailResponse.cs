@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 namespace Models.Tmdb
 {
     public class TmdbMovieDetailResponse
@@ -5,9 +6,20 @@ namespace Models.Tmdb
         public int Id { get; set; }
         public string Title { get; set; }
         public string Overview { get; set; }
-        public int ReleaseYear { get; set; }
-        public string PosterUrl { get; set; }
-        public List<int> Genres { get; set; }
-        public int RuntimeMinutes   { get; set; }
+
+        [JsonPropertyName("release_date")]
+        public string ReleaseDate { get; set; }
+        [JsonPropertyName("poster_path")]
+        public string PosterPath { get; set; }
+        public List<TmdbGenre> Genres { get; set; } = new List<TmdbGenre>();
+        public int? Runtime   { get; set; }
+    }
+    public class TmdbGenre
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
     }
 }

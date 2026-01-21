@@ -6,7 +6,7 @@ namespace DTOs
     public class TagEmotionRequestDto
     {
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EmotionType Emotion { get; set; }
+        public EmotionType? Emotion { get; set; }
         public string UserId { get; set; }
     }
 }

@@ -1,10 +1,10 @@
 using System.Text.Json.Serialization;
 using Models;
-
 namespace DTOs
 {
     public class MovieSummaryDto
     {
+        
         public int Id { get; set; }
         public string Title { get; set; }
         public string Overview { get; set; }
@@ -18,13 +18,13 @@ namespace DTOs
         public List<TopEmotion> TopEmotions { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EmotionType UserEmotion { get; set; }
+        public EmotionType? UserEmotion { get; set; }
     }
 
     public class TopEmotion
     {
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EmotionType Emotion { get; set; }
+        public EmotionType? Emotion { get; set; }
         public int Count { get; set; }
     }
 }

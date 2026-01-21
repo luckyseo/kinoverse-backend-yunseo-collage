@@ -9,6 +9,6 @@ namespace DTOs
         public EmotionStateDto EmotionState { get; set; }
         
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EmotionType UserEmotion { get; set; }
+        public EmotionType? UserEmotion { get; set; }
     }
 }

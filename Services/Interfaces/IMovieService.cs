@@ -11,10 +11,10 @@ namespace Collage.Backend.Induction.Starter.Services
     public interface IMovieService
     {
         // Define movie-related service methods here
-        Task<MovieSummaryDto> GetMoviesByGenreAsync(string genre);
-        Task<MovieDetailDto> GetMovieByIdAsync(int movieId);
-        Task<MovieSummaryDto> GetMoviesByIdAndRecommendationsAsync(int movieId);
-        Task<TagEmotionResponseDto> AddEmotionToMovieAsync(TagEmotionRequestDto request);
+        Task<IEnumerable<MovieSummaryDto>> GetMoviesByGenreAsync(int genreId);
+        Task<MovieDetailDto> GetMovieDetailsByIdAsync(int movieId);
+        // Task<MovieSummaryDto> GetMoviesByIdAndRecommendationsAsync(int movieId);
+        // Task<TagEmotionResponseDto> AddEmotionToMovieAsync(TagEmotionRequestDto request);
 
     }
 }

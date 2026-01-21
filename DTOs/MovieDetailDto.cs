@@ -17,12 +17,25 @@ namespace DTOs
     */
     public class MovieDetailDto
     {
+        public MovieDetailDto() {}
+        public MovieDetailDto(int id, string title, string overview, int releaseYear, string posterUrl, List<int> genres, int runtimeMinutes, EmotionStateDto emotionState)
+        {
+            Id = id;
+            Title = title;
+            Overview = overview;
+            ReleaseYear = releaseYear;
+            PosterUrl = posterUrl;
+            Genres = genres;
+            RuntimeMinutes = runtimeMinutes;
+            EmotionState = emotionState;
+        }
+
         public int Id { get; set; }
         public string Title { get; set; }
         public string Overview { get; set; }
         public int ReleaseYear { get; set; }
         public string PosterUrl { get; set; }
-        public List<Genre> Genres { get; set; }
+        public List<int> Genres { get; set; }
         public int RuntimeMinutes   { get; set; }
         public EmotionStateDto EmotionState {get; set;}
     }
