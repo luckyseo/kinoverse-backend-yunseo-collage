@@ -44,6 +44,51 @@ namespace Collage.Backend.Induction.Starter.Services
             }
             
         }
+   
+        private static EmotionSummary EmotionForMovieSummary(int movieId)
+        {
+            var movieEmotionState = _movieEmotionStates.GetOrAdd(movieId, new MovieEmotionState());
+
+            if(movieEmotionState.EmotionCounts.Values.All(value => value == 0))
+            {
+                return new EmotionSummary
+                            {
+                                TopEmotions = new List<TopEmotion>(
+                                    //just show in order top 3 with count 0
+                                    movieEmotionState.EmotionCounts
+                                        .Select(kvp => new TopEmotion
+                                        {
+                                            Emotion = kvp.Key,
+                                            Count = kvp.Value
+                                        })
+                                        .Take(3)      
+                                ),
+                                UserEmotion = null
+                            };
+            }
+            else
+            {
+                var Max = movieEmotionState.EmotionCounts.Values.Max(); //index of max value
+                var KeyOfMaxValue = movieEmotionState.EmotionCounts.FirstOrDefault(x => x.Value == Max).Key;
+
+                return new EmotionSummary
+                {
+                                TopEmotions = new List<TopEmotion>(
+                                    movieEmotionState.EmotionCounts
+                                        .Where(kvp => kvp.Value >= 0)
+                                        .Select(kvp => new TopEmotion
+                                        {
+                                            Emotion = kvp.Key,
+                                            Count = kvp.Value
+                                        })
+                                        .OrderByDescending(te => te.Count)
+                                        .Take(3)
+                                ),
+                                UserEmotion = KeyOfMaxValue
+                            };
+            }
+            
+        }
         public MoviesService(TmdbClient tmdbClient, IMemoryCache memoryCache)
         {
             _client = tmdbClient;
@@ -72,10 +117,7 @@ namespace Collage.Backend.Induction.Starter.Services
                     raw.Overview,
                     raw.ReleaseDate, //will be parsed in base class
                     raw.PosterPath,
-                    new EmotionSummary 
-                    { 
-                        TopEmotions = new List<TopEmotion>() 
-                    }
+                    EmotionForMovieSummary(raw.Id)
                 ))
                 .ToList();
             _cache.Set(cacheKey, movies, TimeSpan.FromMinutes(15));
@@ -127,10 +169,7 @@ namespace Collage.Backend.Induction.Starter.Services
                     raw.Overview,
                     raw.ReleaseDate, 
                     raw.PosterPath,
-                    new EmotionSummary 
-                    { 
-                        TopEmotions = new List<TopEmotion>() 
-                    }
+                    EmotionForMovieSummary(raw.Id)
                 ))
                 .ToList();
             _cache.Set(cacheKey, movies, TimeSpan.FromMinutes(20));

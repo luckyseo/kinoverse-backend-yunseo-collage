@@ -37,6 +37,17 @@ namespace DTOs
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public EmotionType? UserEmotion { get; set; }
+
+        public EmotionSummary()
+        {
+            TopEmotions = new List<TopEmotion>();
+            UserEmotion = null;
+        }
+        public EmotionSummary(List<TopEmotion> topEmotions, EmotionType? userEmotion)
+        {
+            TopEmotions = topEmotions;
+            UserEmotion = userEmotion;
+        }
     }
 
     public class TopEmotion
@@ -44,5 +55,12 @@ namespace DTOs
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public EmotionType? Emotion { get; set; }
         public int Count { get; set; }
+
+        public TopEmotion() {}
+        public TopEmotion(EmotionType? emotion, int count)
+        {
+            Emotion = emotion;
+            Count = count;
+        }
     }
 }
