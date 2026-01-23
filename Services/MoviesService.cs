@@ -22,73 +22,55 @@ namespace Collage.Backend.Induction.Starter.Services
         private static EmotionStateDto EmotionForMovieDetail(int movieId)
         {
             var movieEmotionState = _movieEmotionStates.GetOrAdd(movieId, new MovieEmotionState());
-
-            if(movieEmotionState.EmotionCounts.Values.All(value => value == 0))
+            EmotionType? UserEmotion;
+        
+            var Max = movieEmotionState.EmotionCounts.Values.Max(); //index of max value
+            var KeyOfMaxValue = movieEmotionState.EmotionCounts.FirstOrDefault(x => x.Value == Max).Key;
+            if(Max == 0)
             {
-                return new EmotionStateDto
-                            {
-                                Counts = movieEmotionState.EmotionCounts.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
-                                UserEmotion = null // This will be set per user in the controller
-                            };
+                UserEmotion = null;
             }
             else
             {
-                var Max = movieEmotionState.EmotionCounts.Values.Max(); //index of max value
-                var KeyOfMaxValue = movieEmotionState.EmotionCounts.FirstOrDefault(x => x.Value == Max).Key;
-
-                return new EmotionStateDto
+                UserEmotion = KeyOfMaxValue;
+            }
+            return new EmotionStateDto
                 {
                     Counts = movieEmotionState.EmotionCounts.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
-                    UserEmotion = KeyOfMaxValue // Top Emotion
+                    UserEmotion = UserEmotion // Top Emotion
                 };
-            }
-            
         }
    
         private static EmotionSummary EmotionForMovieSummary(int movieId)
         {
             var movieEmotionState = _movieEmotionStates.GetOrAdd(movieId, new MovieEmotionState());
-
-            if(movieEmotionState.EmotionCounts.Values.All(value => value == 0))
-            {
-                return new EmotionSummary
-                            {
-                                TopEmotions = new List<TopEmotion>(
-                                    //just show in order top 3 with count 0
-                                    movieEmotionState.EmotionCounts
-                                        .Select(kvp => new TopEmotion
-                                        {
-                                            Emotion = kvp.Key,
-                                            Count = kvp.Value
+            var TopEmotions = movieEmotionState.EmotionCounts
+                                        .OrderByDescending(kvp => kvp.Value) // 1. Sort by Count (High to Low)
+                                        .ThenBy(kvp => kvp.Key)              // 2. Tie-breaker (Alphabetical)
+                                        .Take(3)                             // 3. Grab top 3
+                                        .Select(kvp => new TopEmotion        // 4. Convert to your DTO
+                                        { 
+                                            Emotion = kvp.Key, 
+                                            Count = kvp.Value 
                                         })
-                                        .Take(3)      
-                                ),
-                                UserEmotion = null
-                            };
+                                        .ToList();
+            EmotionType? UserEmotion;
+            if(TopEmotions[0].Count == 0)
+            {
+                UserEmotion = null;
             }
             else
             {
-                var Max = movieEmotionState.EmotionCounts.Values.Max(); //index of max value
-                var KeyOfMaxValue = movieEmotionState.EmotionCounts.FirstOrDefault(x => x.Value == Max).Key;
-
-                return new EmotionSummary
-                {
-                                TopEmotions = new List<TopEmotion>(
-                                    movieEmotionState.EmotionCounts
-                                        .Where(kvp => kvp.Value >= 0)
-                                        .Select(kvp => new TopEmotion
-                                        {
-                                            Emotion = kvp.Key,
-                                            Count = kvp.Value
-                                        })
-                                        .OrderByDescending(te => te.Count)
-                                        .Take(3)
-                                ),
-                                UserEmotion = KeyOfMaxValue
-                            };
+                UserEmotion = TopEmotions[0].Emotion;
+            }
+    
+            return new EmotionSummary
+                        {        
+                            TopEmotions = TopEmotions,
+                            UserEmotion = UserEmotion // No user-specific emotion in summary
+                        };
             }
             
-        }
         public MoviesService(TmdbClient tmdbClient, IMemoryCache memoryCache)
         {
             _client = tmdbClient;
@@ -101,7 +83,7 @@ namespace Collage.Backend.Induction.Starter.Services
             //https://api.themoviedb.org/3/search/movie 
 
             // Implementation to get movies by genre using TMDbLib
-            string cacheKey = $"movies:genre:{genreId}";
+            string cacheKey = $"movies:genre:scifi";
             if (_cache.TryGetValue(cacheKey, out IReadOnlyList<MovieSummaryDto> cached))
                 return cached;
 
@@ -218,8 +200,12 @@ namespace Collage.Backend.Induction.Starter.Services
                     UserEmotion = emotionState.UserEmotionsByUserId[userId]
                 }
             };
-            string cacheKey = $"movies:{movieId}";
-            _cache.Remove(cacheKey);
+            string cache_movieID = $"movies:{movieId}";
+            string cache_genrePrefix = $"movies:genre:scifi";
+            string cache_recommendation = $"movie:{movieId}:recommendations";
+            _cache.Remove(cache_genrePrefix);
+            _cache.Remove(cache_recommendation);
+            _cache.Remove(cache_movieID);
             // Implementation to add emotion to a movie
             return await Task.FromResult(response);
         }
