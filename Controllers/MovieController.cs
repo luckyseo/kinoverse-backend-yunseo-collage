@@ -56,9 +56,9 @@ namespace Collage.Backend.Induction.Starter.Controllers
         }
 
         [HttpPost("{movieId}/emotions")]
-        public async Task<IActionResult> AddEmotion(int movieId, [FromBody] TagEmotionRequestDto request)
+        public async Task<IActionResult> AddEmotion([FromRoute] string movieId, [FromBody] TagEmotionRequestDto request)
         {
-            var response = await _moviesService.AddEmotionToMovieAsync(movieId, request);
+            var response = await _moviesService.AddEmotionToMovieAsync(Convert.ToInt32(movieId), request);
             return Ok(response);
         }
 
