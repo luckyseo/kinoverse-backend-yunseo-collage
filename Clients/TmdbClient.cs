@@ -39,7 +39,7 @@ namespace Clients
                 ?? throw new InvalidOperationException("TMDb response was empty");
         }
 
-        public async Task<TmdbRecommendationResponse> GetMovieRecommendationsAsync(int movieId)
+        public async Task<TmdbDiscoverResponse> GetMovieRecommendationsAsync(int movieId)
         {
             var response = await _httpClient.GetAsync(
                 $"movie/{movieId}/recommendations?api_key={_options.ApiKey}"
@@ -47,7 +47,7 @@ namespace Clients
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<TmdbRecommendationResponse>()
+            return await response.Content.ReadFromJsonAsync<TmdbDiscoverResponse>()
                 ?? throw new InvalidOperationException("TMDb response was empty");
         }
     }

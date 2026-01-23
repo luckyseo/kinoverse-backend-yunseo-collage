@@ -30,10 +30,11 @@ namespace Collage.Backend.Induction.Starter.Controllers
         }
 
         [HttpGet("scifi")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetMoviesByGenre_Scifi()
+        [ProducesResponseType(typeof(IEnumerable<MovieSummaryDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetMoviesByGenre(string genre)
         {
-            var response = await _moviesService.GetMoviesByGenreAsync(878);
+            var response = await _moviesService.GetMoviesByGenreAsync(Genre.GetGenreId(genre));
             return Ok(response);
         }
 
@@ -45,21 +46,21 @@ namespace Collage.Backend.Induction.Starter.Controllers
             var response = await _moviesService.GetMovieDetailsByIdAsync(movieId);
             return Ok(response);
         }
-        // [HttpGet("{movieId}/recommendations")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // public async Task<IActionResult> GetRecommendations(int movieId)
-        // {
-        //     var response = await _moviesService.GetMoviesByIdAndRecommendationsAsync(movieId);
-        //     return Ok(response);   
-        // }
+        [HttpGet("{movieId}/recommendations")]
+        [ProducesResponseType(typeof(IEnumerable<MovieSummaryDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetRecommendations(int movieId)
+        {
+            var response = await _moviesService.GetMoviesByIdAndRecommendationsAsync(movieId);
+            return Ok(response);   
+        }
 
-        // [HttpPost("{movieId}/emotions")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // public async Task<IActionResult> AddEmotion(int movieId, [FromBody] TagEmotionRequestDto request)
-        // {
-        //     var response = await _moviesService.AddEmotionToMovieAsync();
-        //      return Ok(response);
-        // }
+        [HttpPost("{movieId}/emotions")]
+        public async Task<IActionResult> AddEmotion(int movieId, [FromBody] TagEmotionRequestDto request)
+        {
+            var response = await _moviesService.AddEmotionToMovieAsync(movieId, request);
+            return Ok(response);
+        }
 
     }
 }

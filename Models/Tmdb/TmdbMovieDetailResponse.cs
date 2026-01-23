@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Models;
 namespace Models.Tmdb
 {
     public class TmdbMovieDetailResponse

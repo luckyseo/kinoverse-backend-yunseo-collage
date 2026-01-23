@@ -2,30 +2,53 @@ using System.Runtime.Serialization;
 
 namespace Models
 {
-    public enum Genre
+    public static class Genre
     {
-        Action, 
-        Adventure, 
-        Animation, 
-        Comedy, 
-        Crime, 
-        Documentary, 
-        Drama, 
-        Family, 
-        Fantasy, 
-        History, 
-        Horror, 
-        Music, 
-        Mystery, 
-        Romance, 
+        public static readonly IReadOnlyDictionary<int, string> Genres = new Dictionary<int, string>
+            {
+                {28,"Action"},
+                {12,"Abenteuer"},
+                {16,"Animation"},
+                {35,"Komödie"},
+                {80,"Krimi"},
+                {99,"Dokumentarfilm"},
+                {18,"Drama"},
+                {10751,"Familie"},
+                {14,"Fantasy"},
+                {36,"Historie"},
+                {27,"Horror"},
+                {10402,"Musik"},
+                {9648,"Mystery"},
+                {10749,"Liebesfilm"},
+                {878,"Science Fiction"},
+                {10770,"TV-Film"},
+                {53,"Thriller"},
+                {10752,"Kriegsfilm"},
+                {37,"Western"}
+            };
 
-        [EnumMember(Value = "Science Fiction")]
-        ScienceFiction, 
-        Thriller, 
+        public static string GetGenreName(int genreId)
+        {
+            return Genres.ContainsKey(genreId) ? Genres[genreId] : "Unknown";
+        }
 
-        [EnumMember(Value = "TV Movie")]
-        TVMovie, 
-        War, 
-        Western
+        public static IEnumerable<string> GetGenreNames(IEnumerable<int> genreIds)
+        {
+            foreach (var id in genreIds)
+            {
+                yield return GetGenreName(id);
+            }
+        }
+        public static int GetGenreId(string genreName)
+        {
+            foreach (var kvp in Genres)
+            {
+                if (kvp.Value.Equals(genreName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return kvp.Key;
+                }
+            }
+            return -1; // Return -1 if genre not found
+        }
     }
 }

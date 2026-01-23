@@ -13,8 +13,8 @@ namespace Collage.Backend.Induction.Starter.Services
         // Define movie-related service methods here
         Task<IEnumerable<MovieSummaryDto>> GetMoviesByGenreAsync(int genreId);
         Task<MovieDetailDto> GetMovieDetailsByIdAsync(int movieId);
-        // Task<MovieSummaryDto> GetMoviesByIdAndRecommendationsAsync(int movieId);
-        // Task<TagEmotionResponseDto> AddEmotionToMovieAsync(TagEmotionRequestDto request);
+        Task<IEnumerable<MovieSummaryDto>> GetMoviesByIdAndRecommendationsAsync(int movieId);
+        Task<TagEmotionResponseDto> AddEmotionToMovieAsync(int movieId, TagEmotionRequestDto request);
 
     }
 }

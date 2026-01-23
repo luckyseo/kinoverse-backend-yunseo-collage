@@ -2,15 +2,33 @@ using System.Text.Json.Serialization;
 using Models;
 namespace DTOs
 {
-    public class MovieSummaryDto
+    public class MovieSummaryDto : Movie
     {
-        
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Overview { get; set; }
-        public int ReleaseYear { get; set; }
-        public string PosterUrl { get; set; }
+        private string _overview;
+        [JsonPropertyOrder(9)]
+        public string Overview { 
+            get { return _overview; }
+            set {   
+                if (value.Length > 50)
+                {
+                    _overview = value.Substring(0, 47) + "...";
+                }
+                else
+                {
+                    _overview = value;
+                }
+            }
+        }
+        [JsonPropertyOrder(10)]
         public EmotionSummary EmotionSummary { get; set; }
+
+        public MovieSummaryDto() {}
+        public MovieSummaryDto(int id, string title, string overview, string releaseYear, string posterUrl, EmotionSummary emotionSummary)
+            : base(id, title, releaseYear, posterUrl)
+        {
+            Overview = overview;
+            EmotionSummary = emotionSummary;
+        }
     }
 
     public class EmotionSummary

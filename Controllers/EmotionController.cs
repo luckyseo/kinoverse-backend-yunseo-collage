@@ -20,7 +20,6 @@ namespace Collage.Backend.Induction.Starter.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetSupportedEmotionTypes()
         {
             var response = await _emotionsService.GetEmotionTypesAsync();

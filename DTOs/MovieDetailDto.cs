@@ -1,4 +1,6 @@
 using Models;
+using System.Text.Json.Serialization;
+
 namespace DTOs
 {
     /*
@@ -15,28 +17,22 @@ namespace DTOs
         If it has been tagged → return the real emotion counts + user emotion (if known)
         This keeps the API contract stable and avoids “sometimes missing fields”.    
     */
-    public class MovieDetailDto
+    public class MovieDetailDto : Movie
     {
         public MovieDetailDto() {}
-        public MovieDetailDto(int id, string title, string overview, int releaseYear, string posterUrl, List<int> genres, int runtimeMinutes, EmotionStateDto emotionState)
+
+        public MovieDetailDto(int id, string title, string overview, string releaseYear, string posterUrl, List<int> genres, int runtimeMinutes, EmotionStateDto emotionState)
+            : base(id, title, overview, releaseYear, posterUrl)
         {
-            Id = id;
-            Title = title;
-            Overview = overview;
-            ReleaseYear = releaseYear;
-            PosterUrl = posterUrl;
             Genres = genres;
             RuntimeMinutes = runtimeMinutes;
             EmotionState = emotionState;
         }
-
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Overview { get; set; }
-        public int ReleaseYear { get; set; }
-        public string PosterUrl { get; set; }
-        public List<int> Genres { get; set; }
+        [JsonPropertyOrder(8)]
+        public List<int> Genres { get; set; }//filter it using genre dictionary on the service layer
+        [JsonPropertyOrder(9)]
         public int RuntimeMinutes   { get; set; }
+        [JsonPropertyOrder(10)]
         public EmotionStateDto EmotionState {get; set;}
     }
 }
