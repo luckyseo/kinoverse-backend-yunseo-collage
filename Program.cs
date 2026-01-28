@@ -40,10 +40,11 @@ builder.Services.AddScoped<IMovieService, MoviesService>();
 
 var app = builder.Build();
 
+app.UseMiddleware<Exceptions>();
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage(); //show detailed error pages in development
+    //app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

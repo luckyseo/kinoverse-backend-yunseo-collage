@@ -18,6 +18,12 @@ namespace Collage.Backend.Induction.Starter.Services
         private readonly TmdbClient _client;
         private readonly IMemoryCache _cache;
 
+        public MoviesService(TmdbClient tmdbClient, IMemoryCache memoryCache)
+        {
+            _client = tmdbClient;
+            _cache = memoryCache;
+        }
+
         private static readonly ConcurrentDictionary<int, MovieEmotionState> _movieEmotionStates = new ConcurrentDictionary<int, MovieEmotionState>();
         private static EmotionStateDto EmotionForMovieDetail(int movieId)
         {
@@ -45,16 +51,18 @@ namespace Collage.Backend.Induction.Starter.Services
         {
             var movieEmotionState = _movieEmotionStates.GetOrAdd(movieId, new MovieEmotionState());
             var TopEmotions = movieEmotionState.EmotionCounts
-                                        .OrderByDescending(kvp => kvp.Value) // 1. Sort by Count (High to Low)
-                                        .ThenBy(kvp => kvp.Key)              // 2. Tie-breaker (Alphabetical)
-                                        .Take(3)                             // 3. Grab top 3
-                                        .Select(kvp => new TopEmotion        // 4. Convert to your DTO
+                                        .OrderByDescending(kvp => kvp.Value) 
+                                        .ThenBy(kvp => kvp.Key)              
+                                        .Take(3)                          
+                                        .Select(kvp => new TopEmotion        
                                         { 
                                             Emotion = kvp.Key, 
                                             Count = kvp.Value 
                                         })
                                         .ToList();
+
             EmotionType? UserEmotion;
+        
             if(TopEmotions[0].Count == 0)
             {
                 UserEmotion = null;
@@ -70,12 +78,6 @@ namespace Collage.Backend.Induction.Starter.Services
                             UserEmotion = UserEmotion // No user-specific emotion in summary
                         };
             }
-            
-        public MoviesService(TmdbClient tmdbClient, IMemoryCache memoryCache)
-        {
-            _client = tmdbClient;
-            _cache = memoryCache;
-        }
 
         public async Task<IEnumerable<MovieSummaryDto>> GetMoviesByGenreAsync(int genreId)
         {
@@ -200,10 +202,11 @@ namespace Collage.Backend.Induction.Starter.Services
                     UserEmotion = emotionState.UserEmotionsByUserId[userId]
                 }
             };
+            
             string cache_movieID = $"movies:{movieId}";
-            string cache_genrePrefix = $"movies:genre:scifi";
+            string cache_genre = $"movies:genre:scifi"; //get genre Id form movieId & update accordingly
             string cache_recommendation = $"movie:{movieId}:recommendations";
-            _cache.Remove(cache_genrePrefix);
+            _cache.Remove(cache_genre);
             _cache.Remove(cache_recommendation);
             _cache.Remove(cache_movieID);
             // Implementation to add emotion to a movie

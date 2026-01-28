@@ -19,7 +19,7 @@ namespace Collage.Backend.Induction.Starter.Controllers
     API ref: https://developer.themoviedb.org/reference/changes-movie-list
     */
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] //api/movies
     public class MoviesController : ControllerBase
     {
         private readonly IMovieService _moviesService;
@@ -31,7 +31,7 @@ namespace Collage.Backend.Induction.Starter.Controllers
 
         [HttpGet("/{genre}")]
         [ProducesResponseType(typeof(IEnumerable<MovieSummaryDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public async Task<IActionResult> GetMoviesByGenre(string genre)
         {
             var response = await _moviesService.GetMoviesByGenreAsync(Genre.GetGenreId(genre));
@@ -40,15 +40,20 @@ namespace Collage.Backend.Induction.Starter.Controllers
 
         [HttpGet("{movieId}")]
         [ProducesResponseType(typeof(MovieDetailDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)] // if TMDb cannot find the movie ID
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public async Task<IActionResult> GetMovieById(int movieId)
         {
             var response = await _moviesService.GetMovieDetailsByIdAsync(movieId);
+            if(response == null)
+            {
+                throw new KeyNotFoundException($"TMDb returned 404 for movieId {movieId}");
+            }
             return Ok(response);
         }
         [HttpGet("{movieId}/recommendations")]
         [ProducesResponseType(typeof(IEnumerable<MovieSummaryDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public async Task<IActionResult> GetRecommendations(int movieId)
         {
             var response = await _moviesService.GetMoviesByIdAndRecommendationsAsync(movieId);
@@ -56,8 +61,13 @@ namespace Collage.Backend.Induction.Starter.Controllers
         }
 
         [HttpPost("{movieId}/emotions")]
+        [ProducesResponseType(typeof(TagEmotionResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] // for invalid emotion 
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public async Task<IActionResult> AddEmotion([FromRoute] string movieId, [FromBody] TagEmotionRequestDto request)
         {
+            var validEmotions = Enum.GetNames(typeof(EmotionType)).ToList();
+            
             var response = await _moviesService.AddEmotionToMovieAsync(Convert.ToInt32(movieId), request);
             return Ok(response);
         }

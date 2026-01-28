@@ -1,5 +1,6 @@
 using Collage.Backend.Induction.Starter.Services;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 
 namespace Collage.Backend.Induction.Starter.Controllers
 {
@@ -20,6 +21,7 @@ namespace Collage.Backend.Induction.Starter.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<EmotionType>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetSupportedEmotionTypes()
         {
             var response = await _emotionsService.GetEmotionTypesAsync();
