@@ -1,164 +1,86 @@
-# Collage Backend Induction Project Starter
+# Kinoverse-backend induction project
 
-This repository is the **official starter project** for the Collage backend induction.
+## Project Overview
 
-It provides a minimal, intentionally structured ASP.NET Core Web API that demonstrates how backend features at Collage are organised and built. You will extend this project as part of your induction assignment.
+- This project is an induction project from the Collage, designed to provide practical experience on ASP.NET. During this phase, the intern learns the key concepts, such as caching, utilising external api, http client, Dto, and error handling.
 
----
+## Tech stack used
 
-## 🎯 Purpose of This Starter Project
+- ASP.NET (C#)
+- Git
 
-This project exists to:
+## How to run the API locally
 
-- provide a clean, working ASP.NET Core Web API baseline
-- demonstrate the expected **Controller → Service → Model → Response** flow
-- remove setup friction so you can focus on learning and building
-- show how controllers call services via dependency injection
-- show how response models are shaped and returned as JSON
-- use Swagger to test endpoints quickly
+1. on terminal: dotnet run
+2. on browser: http://localhost:5262/swagger
+3. test API
 
-This starter is intentionally small so the structure is obvious.
+## How to configure the TBDb API Key
 
-You are **not expected to build an application from scratch**.  
-Instead, you will **extend this existing structure** as you work through the induction project.
-
----
-
-## 🧱 What This Project Includes
-
-This starter project includes:
-
-- ASP.NET Core Web API
-- Swagger for API testing
-- Dependency Injection setup
-- A simple Health endpoint demonstrating structure
-- A clear folder layout you should follow
-
-This project intentionally does **not** include:
-
-- databases
-- authentication or authorization
-- DTOs or mapping layers
-- external APIs (e.g. TMDb, which is used in the induction project)
-- complex business logic
-
-These concepts are introduced later in the program.
-
----
-
-## ⚠️ Important Note About the Health Example
-
-The Health controller, service, and model are provided **purely as a reference example**.
-
-They are **not part of your induction assignment submission**.
-
-Use them to understand:
-
-- where logic should live
-- how controllers and services interact
-- how responses are returned
-
-You should follow the same structure when building your own features.
-
----
-
-## ✅ Key Files to Pay Attention To (Very Important)
-
-These files demonstrate the structure you should follow:
-
-### 1) `Controllers/HealthController.cs`
-
-- Defines API endpoints (routes)
-- Receives incoming requests
-- Delegates work to the service
-- Returns JSON responses
-
-**Controllers should stay thin.**
-
----
-
-### 2) `Services/IHealthService.cs`
-
-- Defines the service “contract” (what the service promises to do)
-- Allows controllers to depend on an interface rather than an implementation
-
----
-
-### 3) `Services/HealthService.cs`
-
-- Contains the logic (even if minimal)
-- Returns a model that the controller sends back to the client
-
-**All meaningful logic should live in services, not controllers.**
-
----
-
-### 4) `Models/HealthResponse.cs`
-
-- Defines the shape of the JSON response
-- Makes the API output explicit and consistent
-
----
-
-### 5) `Program.cs`
-
-This is where the application is wired together. Pay attention to:
-
-- `AddControllers()` (enables controller-based APIs)
-- `AddSwaggerGen()` (enables Swagger)
-- service registrations (dependency injection), e.g. `AddScoped<...>()`
-- `MapControllers()` (connects controller routes to the runtime)
-
----
-
-## ▶️ How to Run the Project
-
-From the project root:
-
-```bash
-dotnet restore
-dotnet run
-```
-
-When the application starts, your terminal will print something like:
-
-```bash
-Now listening on: https://localhost:7xxx
-Now listening on: http://localhost:5xxx
-```
-
-The port numbers may differ on your machine.
-
----
-
-## 🧪 How to Test Endpoints Using Swagger
-
-1. Open your web browser and navigate to `http://localhost:5xxx/swagger` (replace `5xxx` with the actual port number printed in your terminal).
-2. You should see the Swagger UI, which provides a user-friendly interface to interact with your API.
-3. Use the Swagger UI to test your API endpoints by sending requests and viewing responses.
-
-Example responses:
+- login TMDb webite
+- get API Key from setting > API
+- dotnet user-secrets init (using .NET Secret manager)
+- dotnet user-secrets set "TmdbSettings:ApiKey" "Your_Actual_Key"
+- On appsetting.json / appsetting.Development.json add below
+  //dotnet user-secrets list
 
 ```json
-{
-  "status": "ok",
-  "service": "collage-backend-induction-starter",
-  "timestampUtc": "2025-01-01T00:00:00Z"
-}
+"TmdbSettings": {
+    "ApiKey": "",
+    "BaseUrl": "https://api.themoviedb.org/3/"
+  },
+//if it's empty, .NET explores appsetting.json -> User Secrets
 ```
 
-If you can successfully call this endpoint, your local setup is complete.
+-Program.cs //bind here! binding -> .NET takes the values from secret storage and inject them into TmdbOptions class
 
-Handle API KEY - keep it personal
+```c#
+builder.Services.Configure<TmdbOptions>(
+    builder.Configuration.GetSection("Tmdb")
+);
+```
 
-1.dotnet add package DotNetEnv
+- Create Configuration.cs and add code below
 
-# Initialize user secrets for your project
+```c#
+public class TmdbOptions
+    {
+        public string ApiKey { get; set; } = null!;
+        public string BaseUrl { get; set; } = null!;
+    }
+```
 
-2. dotnet user-secrets init
+- Creat TmdbClient.cs and use API Key without exposting the actual key like below
 
-# Add your API key
+```c#
+ private readonly TmdbOptions _options;
 
-3. dotnet user-secrets set "TmdbSettings:ApiKey" "your_api_key_here"
+ public TmdbClient(HttpClient httpClient, IOptions<TmdbOptions> options)
+        {
+            _httpClient = httpClient;
+            _options = options.Value; //actual API Key here
+        }
 
-4. verify by : dotnet user-secrets list
+ var response = await _httpClient.GetAsync(
+                $"discover/movie?with_genres={genreId}&api_key={_options.ApiKey}"
+            );
+```
+
+## Available API endpoints (brief summary)
+
+1. GET /api/movies/scifi : fetches the list of sci-fi movies with emotion summary(top emotions & user Emotion).
+2. GET /api/movies/{movieId} : fetches the details of the movie using movieId with emotionState & userEmotion.
+3. GET /api/movies/{movieId}/recommendations : lists the movie recommendations with emotion summary (top emotion & user Emotion)
+4. POST /api/movies/{movieId}/emotions : Can post emotions from the user to the movie
+   request {
+   userId: "string",
+   emotion: "string"
+   }
+   response: movieId, emotionState, userEmotion
+5. GET /api/emotions : lists all the available emotions
+
+## Optional enhancement
+
+- Utilised middleware instead of writing mutiple try & catch
+- api/movies/scifi -> api/movies/{genre}
+  instead of fetching one genre "scifi", extended the api functionality to whole genre that TMDb supports.
