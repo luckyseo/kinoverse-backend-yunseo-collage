@@ -30,13 +30,13 @@ public class Exceptions
 
         // Default to 502/503 for technical failures
         var statusCode = HttpStatusCode.BadGateway;
-        var errorTitle = "TMDb is down / fails";
+        var errorTitle = exception.Message;
 
         // If it's a 404 (KeyNotFoundException), map it to your requirements
         if (exception is KeyNotFoundException)
         {
             statusCode = HttpStatusCode.NotFound;
-            errorTitle = "Movie not found";
+            errorTitle = exception.Message;
         }else if (exception is InvalidEmotionException)
         {
             statusCode = HttpStatusCode.BadRequest; // 400
