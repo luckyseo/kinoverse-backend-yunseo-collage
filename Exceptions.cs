@@ -40,7 +40,7 @@ public class Exceptions
         }else if (exception is InvalidEmotionException)
         {
             statusCode = HttpStatusCode.BadRequest; // 400
-            errorTitle = "Invalid emotion names";
+            errorTitle = exception.Message;
         }
         context.Response.StatusCode = (int)statusCode;
 
@@ -53,8 +53,10 @@ public class Exceptions
 
         return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
-    public class InvalidEmotionException : Exception
+    public class InvalidEmotionException : Exception //Custom Exception
     {
-        public InvalidEmotionException(string message) : base(message) { }
+      public InvalidEmotionException(string message) : base(message)
+        {
+        }
     }
 }

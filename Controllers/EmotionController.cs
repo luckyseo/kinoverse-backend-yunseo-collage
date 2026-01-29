@@ -17,7 +17,7 @@ namespace Collage.Backend.Induction.Starter.Controllers
 
         public EmotionsController(IEmotionService emotionsService)
         {
-            _emotionsService = emotionsService;
+            _emotionsService = emotionsService; 
         }
 
         [HttpGet]

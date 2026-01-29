@@ -1,5 +1,8 @@
 using Collage.Backend.Induction.Starter.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 using Clients;
 using Models;
 using DTOs;
@@ -34,6 +37,7 @@ namespace Collage.Backend.Induction.Starter.Controllers
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public async Task<IActionResult> GetMoviesByGenre(string genre)
         {
+            //need to validate genre input
             var response = await _moviesService.GetMoviesByGenreAsync(Genre.GetGenreId(genre));
             return Ok(response);
         }
@@ -67,7 +71,12 @@ namespace Collage.Backend.Induction.Starter.Controllers
         public async Task<IActionResult> AddEmotion([FromRoute] string movieId, [FromBody] TagEmotionRequestDto request)
         {
             var validEmotions = Enum.GetNames(typeof(EmotionType)).ToList();
-            
+            //need to validate available emotions
+            if(!validEmotions.Contains(request.Emotion, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new Exceptions.InvalidEmotionException($"{request.Emotion} is not a valid emotion. Allowed: {string.Join(", ", validEmotions)}"
+        );
+            }
             var response = await _moviesService.AddEmotionToMovieAsync(Convert.ToInt32(movieId), request);
             return Ok(response);
         }

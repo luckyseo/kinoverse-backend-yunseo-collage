@@ -8,6 +8,7 @@
 
 - ASP.NET (C#)
 - Git
+- Follows MVC structure
 
 ## How to run the API locally
 
@@ -25,7 +26,7 @@
   //dotnet user-secrets list
 
 ```json
-"TmdbSettings": {
+"Tmdb": {
     "ApiKey": "",
     "BaseUrl": "https://api.themoviedb.org/3/"
   },
@@ -69,6 +70,9 @@ public class TmdbOptions
 ## Available API endpoints (brief summary)
 
 1. GET /api/movies/scifi : fetches the list of sci-fi movies with emotion summary(top emotions & user Emotion).
+
+- As this project doesnt not have login feature, and does not know the current user, userEmotion returns the most selected emotion.
+
 2. GET /api/movies/{movieId} : fetches the details of the movie using movieId with emotionState & userEmotion.
 3. GET /api/movies/{movieId}/recommendations : lists the movie recommendations with emotion summary (top emotion & user Emotion)
 4. POST /api/movies/{movieId}/emotions : Can post emotions from the user to the movie
