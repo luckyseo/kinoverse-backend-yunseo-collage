@@ -37,7 +37,7 @@ namespace Clients
             catch (HttpRequestException)
             {
                 // This triggers the 502/503 mapping in your Middleware
-                throw new Exception("TMDb is down / fails");
+                throw new Exception("TMDb is down / fails - from TmdbClient.cs");
             }
         }
         public async Task<TmdbDiscoverResponse> GetMoviesByGenreAsync(int genreId)

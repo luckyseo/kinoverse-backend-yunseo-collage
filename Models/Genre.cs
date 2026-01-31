@@ -32,14 +32,14 @@ namespace Models
             return Genres.ContainsKey(genreId) ? Genres[genreId] : "Unknown";
         }
 
-        public static IEnumerable<string> GetGenreNames(IEnumerable<int> genreIds)
+        public static IEnumerable<string> GetGenreNames(IEnumerable<int> genreIds) //For MovieDetailDto. It returns genrenames
         {
             foreach (var id in genreIds)
             {
                 yield return GetGenreName(id);
             }
         }
-        public static int GetGenreId(string genreName)
+        public static int GetGenreId(string genreName) //When user type genre name, convert to genre ID
         {
             foreach (var kvp in Genres)
             {

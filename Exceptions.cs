@@ -5,20 +5,20 @@ public class Exceptions
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<Exceptions> _logger;
-
+    //delegate parameiterise the function
     public Exceptions(RequestDelegate next, ILogger<Exceptions> logger)
     {
         _next = next;
-        _logger = logger;
+        _logger = logger; //for logging errors
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context) //This is the entry point. This runs after the middleware is registered
     {
         try
         {
-            await _next(context);
+            await _next(context); //passes the request to the next middleware component
         }
-        catch (Exception ex)
+        catch (Exception ex) //catches any unhandled exceptions
         {
             _logger.LogError(ex, "An unhandled exception occurred.");
             await HandleExceptionAsync(context, ex);

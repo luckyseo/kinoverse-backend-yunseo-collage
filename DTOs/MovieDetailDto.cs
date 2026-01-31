@@ -24,14 +24,16 @@ namespace DTOs
         public MovieDetailDto(int id, string title, string overview, string releaseYear, string posterUrl, List<int> genres, int runtimeMinutes, EmotionStateDto emotionState)
             : base(id, title, overview, releaseYear, posterUrl)
         {
-            Genres = genres;
+            Genres = genres.Select(g => Genre.GetGenreName(g)).ToList(); //convert genre IDs to names
             RuntimeMinutes = runtimeMinutes;
             EmotionState = emotionState;
         }
         [JsonPropertyOrder(8)]
-        public List<int> Genres { get; set; }//filter it using genre dictionary on the service layer
+        public List<string> Genres{  get; set;  }
+
         [JsonPropertyOrder(9)]
         public int RuntimeMinutes   { get; set; }
+
         [JsonPropertyOrder(10)]
         public EmotionStateDto EmotionState {get; set;}
     }
