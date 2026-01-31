@@ -37,7 +37,11 @@ namespace Collage.Backend.Induction.Starter.Controllers
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public async Task<IActionResult> GetMoviesByGenre(string genre)
         {
-            //need to validate genre input
+            var genres = Genre.Genres.Values;
+            if(!genres.Contains(genre, StringComparer.OrdinalIgnoreCase)) // faster than converting to lowercase and comparing
+            {
+                throw new KeyNotFoundException($"{genre} is not a valid genre. Allowed genres: {string.Join(", ", genres)}");
+            }
             var response = await _moviesService.GetMoviesByGenreAsync(Genre.GetGenreId(genre));
             return Ok(response);
         }
@@ -49,10 +53,6 @@ namespace Collage.Backend.Induction.Starter.Controllers
         public async Task<IActionResult> GetMovieById(int movieId)
         {
             var response = await _moviesService.GetMovieDetailsByIdAsync(movieId);
-            if(response == null)
-            {
-                throw new KeyNotFoundException($"TMDb returned 404 for movieId {movieId}");
-            }
             return Ok(response);
         }
         [HttpGet("{movieId}/recommendations")]
@@ -71,11 +71,9 @@ namespace Collage.Backend.Induction.Starter.Controllers
         public async Task<IActionResult> AddEmotion([FromRoute] string movieId, [FromBody] TagEmotionRequestDto request)
         {
             var validEmotions = Enum.GetNames(typeof(EmotionType)).ToList();
-            //need to validate available emotions
             if(!validEmotions.Contains(request.Emotion, StringComparer.OrdinalIgnoreCase))
             {
-                throw new Exceptions.InvalidEmotionException($"{request.Emotion} is not a valid emotion. Allowed: {string.Join(", ", validEmotions)}"
-        );
+                throw new InvalidEmotionException($"{request.Emotion} is not a valid emotion. Allowed: {string.Join(", ", validEmotions)}");
             }
             var response = await _moviesService.AddEmotionToMovieAsync(Convert.ToInt32(movieId), request);
             return Ok(response);

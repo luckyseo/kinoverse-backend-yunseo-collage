@@ -29,7 +29,7 @@ namespace Clients
                 }
 
                 // Handle 500/502 (Requirement: TMDb is down / fails)
-                response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode(); // Throws if not 2xx
 
                 return await response.Content.ReadFromJsonAsync<T>() 
                     ?? throw new Exception("TMDb returned an empty response.");
