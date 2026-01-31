@@ -85,7 +85,7 @@ namespace Collage.Backend.Induction.Starter.Services
             //https://api.themoviedb.org/3/search/movie 
 
             // Implementation to get movies by genre using TMDbLib
-            string cacheKey = $"movies:genre:scifi";
+            string cacheKey = $"movies:genre:{genreId}";
             if (_cache.TryGetValue(cacheKey, out IReadOnlyList<MovieSummaryDto> cached))
                 return cached;
 
@@ -117,7 +117,7 @@ namespace Collage.Backend.Induction.Starter.Services
             {
                 return cached;
             }
-            var tmdbRaw = await _client.GetMovieDetailsByIdAsync(movieId);
+            var tmdbRaw = await _client.GetMovieDetailsByIdAsync(movieId);        
             if (tmdbRaw == null)
             {
                 return new MovieDetailDto(); 
@@ -137,6 +137,7 @@ namespace Collage.Backend.Induction.Starter.Services
         }
         public async Task<IEnumerable<MovieSummaryDto>> GetMoviesByIdAndRecommendationsAsync(int movieId)
         {
+                
             string cacheKey = $"movie:{movieId}:recommendations";
             if (_cache.TryGetValue(cacheKey, out IReadOnlyList<MovieSummaryDto> cached))
                 return cached;
@@ -162,6 +163,7 @@ namespace Collage.Backend.Induction.Starter.Services
 
         public async Task<TagEmotionResponseDto> AddEmotionToMovieAsync(int movieId, TagEmotionRequestDto request)
         {
+
             var emotionState = _movieEmotionStates.GetOrAdd(movieId, new MovieEmotionState());//get existing or create new
             var userId = request.UserId;
             //validate whether the emotion exists
@@ -202,11 +204,19 @@ namespace Collage.Backend.Induction.Starter.Services
                     UserEmotion = emotionState.UserEmotionsByUserId[userId]
                 }
             };
-            
+
+            //get genreIds from current movieId -> update cache accordingly
             string cache_movieID = $"movies:{movieId}";
-            string cache_genre = $"movies:genre:scifi"; //get genre Id form movieId & update accordingly
+
+            var tmdbRaw = await _client.GetMovieDetailsByIdAsync(movieId);  
+            List<int> genreIds = tmdbRaw.Genres.Select(g => g.Id).ToList();
+            foreach (var genreId in genreIds)
+            {
+                var cacheKey = $"movies:genre:{genreId}";
+                _cache.Remove(cacheKey);
+            }
+            
             string cache_recommendation = $"movie:{movieId}:recommendations";
-            _cache.Remove(cache_genre);
             _cache.Remove(cache_recommendation);
             _cache.Remove(cache_movieID);
             // Implementation to add emotion to a movie

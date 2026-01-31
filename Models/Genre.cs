@@ -41,11 +41,11 @@ namespace Models
         }
         public static int GetGenreId(string genreName) //When user type genre name, convert to genre ID
         {
-            foreach (var kvp in Genres)
+            foreach (var genre in Genres)
             {
-                if (kvp.Value.Equals(genreName, StringComparison.OrdinalIgnoreCase))
+                if (genre.Value.Equals(genreName, StringComparison.OrdinalIgnoreCase))
                 {
-                    return kvp.Key;
+                    return genre.Key;
                 }
             }
             return -1; // Return -1 if genre not found
