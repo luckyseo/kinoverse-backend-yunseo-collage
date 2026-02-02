@@ -59,8 +59,8 @@ namespace Clients
         public async Task<TmdbDiscoverResponse> GetMovieRecommendationsAsync(int movieId)
         {
             return await GetAsync<TmdbDiscoverResponse>(
-                $"{_options.BaseUrl}movie/{movieId}/recommendations",
-                $"Get Movie Recommendations from {movieId}"
+                $"{_options.BaseUrl}movie/{movieId}/recommendations?",
+                "Get Movie Recommendations"
             );
         }
     }
