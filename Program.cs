@@ -21,7 +21,7 @@ builder.Services.AddHttpClient<TmdbClient>((sp, client) =>
     // {
     //     Console.WriteLine($"SUCCESS: ApiKey loaded. Starts with: {options.ApiKey.Substring(0, 4)}***");
     // }
-    client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
+    client.BaseAddress = new Uri(options.BaseUrl);
     client.DefaultRequestHeaders.Accept.Add(
         new MediaTypeWithQualityHeaderValue("application/json")
     );

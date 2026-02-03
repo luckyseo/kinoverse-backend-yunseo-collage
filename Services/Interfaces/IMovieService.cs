@@ -2,6 +2,7 @@
 using Models;
 using System.Threading.Tasks;
 using DTOs;
+using System.Collections.Concurrent;
 namespace Collage.Backend.Induction.Starter.Services
 {
 //     GET /api/movies/scifi - movie summaries
@@ -15,6 +16,6 @@ namespace Collage.Backend.Induction.Starter.Services
         Task<MovieDetailDto> GetMovieDetailsByIdAsync(int movieId);
         Task<IEnumerable<MovieSummaryDto>> GetMoviesByIdAndRecommendationsAsync(int movieId);
         Task<TagEmotionResponseDto> AddEmotionToMovieAsync(int movieId, TagEmotionRequestDto request);
-
+        Task<IDictionary<string, EmotionType?>> GetUserEmotionsForMovieAsync(int movieId);
     }
 }

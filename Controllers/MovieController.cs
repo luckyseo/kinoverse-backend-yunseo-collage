@@ -73,11 +73,19 @@ namespace Collage.Backend.Induction.Starter.Controllers
             var validEmotions = Enum.GetNames(typeof(EmotionType)).ToList();
             if(!validEmotions.Contains(request.Emotion, StringComparer.OrdinalIgnoreCase))
             {
-                throw new InvalidEmotionException($"{request.Emotion} is not a valid emotion. Allowed: {string.Join(", ", validEmotions)}");
+                throw new Exceptions.InvalidEmotionException($"{request.Emotion} is not a valid emotion. Allowed: {string.Join(", ", validEmotions)}");
             }
             var response = await _moviesService.AddEmotionToMovieAsync(Convert.ToInt32(movieId), request);
             return Ok(response);
         }
+
+        [HttpGet("{movieId}/users")]
+        public async Task<IActionResult> GetUserEmotionsListAsync(int movieId)
+        {
+            var response = await _moviesService.GetUserEmotionsForMovieAsync(movieId);
+            return Ok(response);
+        }
+
 
     }
 }

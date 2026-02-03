@@ -222,5 +222,14 @@ namespace Collage.Backend.Induction.Starter.Services
             // Implementation to add emotion to a movie
             return await Task.FromResult(response);
         }
+    
+        public Task<IDictionary<string, EmotionType?>> GetUserEmotionsForMovieAsync(int movieId)
+        {
+            if (_movieEmotionStates.TryGetValue(movieId, out var emotionState))
+            {
+                return Task.FromResult<IDictionary<string, EmotionType?>>(emotionState.UserEmotionsByUserId);
+            }
+            return Task.FromResult<IDictionary<string, EmotionType?>>(new Dictionary<string, EmotionType?>());
+        }
     }
 }

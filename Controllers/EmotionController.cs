@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Collage.Backend.Induction.Starter.Services;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -14,6 +15,7 @@ namespace Collage.Backend.Induction.Starter.Controllers
     public class EmotionsController : ControllerBase
     {
         private readonly IEmotionService _emotionsService;
+        private readonly IMovieService _moviesService;
 
         public EmotionsController(IEmotionService emotionsService)
         {
@@ -27,6 +29,7 @@ namespace Collage.Backend.Induction.Starter.Controllers
             var response = await _emotionsService.GetEmotionTypesAsync();
             return Ok(response);
         }
+
 
     }
 }

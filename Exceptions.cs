@@ -45,4 +45,11 @@ public class Exceptions
 
         return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
+
+    public class InvalidEmotionException : Exception
+    {
+        public InvalidEmotionException(string message) : base(message)
+        {
+        }
+    }
 }
