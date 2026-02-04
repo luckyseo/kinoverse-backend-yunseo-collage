@@ -167,10 +167,8 @@ namespace Collage.Backend.Induction.Starter.Services
             var emotionState = _movieEmotionStates.GetOrAdd(movieId, new MovieEmotionState());//get existing or create new
             var userId = request.UserId;
             //validate whether the emotion exists
-            if(!Enum.TryParse<EmotionType>(request.Emotion, true, out var ValidEmotion)){
-                throw new ArgumentException("Invalid emotion type");
-            }
-            //if user does not exist in the dictionary, add new entry
+            EmotionType ValidEmotion = (Enum.Parse<EmotionType>(request.Emotion, true));
+            //if user does not exist in the dictionary, add new entr>y
             if (!emotionState.UserEmotionsByUserId.ContainsKey(userId))
             {
                 emotionState.UserEmotionsByUserId[userId] = null;

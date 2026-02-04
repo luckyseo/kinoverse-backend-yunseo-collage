@@ -32,7 +32,7 @@ namespace Collage.Backend.Induction.Starter.Controllers
             _moviesService = moviesService;
         }
 
-        [HttpGet("/{genre}")]
+        [HttpGet("genre/{genre}")]
         [ProducesResponseType(typeof(IEnumerable<MovieSummaryDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public async Task<IActionResult> GetMoviesByGenre(string genre)

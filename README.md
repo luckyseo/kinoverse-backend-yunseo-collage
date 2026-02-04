@@ -70,18 +70,27 @@ public class TmdbOptions
 ## Available API endpoints (brief summary)
 
 1. GET /api/movies/scifi : fetches the list of sci-fi movies with emotion summary(top emotions & user Emotion).
+   e.g http://localhost:5262/api/movies/genre/Science Fiction
 
 - As this project doesnt not have login feature, and does not know the current user, userEmotion returns the most selected emotion.
 
 2. GET /api/movies/{movieId} : fetches the details of the movie using movieId with emotionState & userEmotion.
+   e.g http://localhost:5262/api/movies/550
 3. GET /api/movies/{movieId}/recommendations : lists the movie recommendations with emotion summary (top emotion & user Emotion)
+   e.g http://localhost:5262/api/movies/550/recommendations
 4. POST /api/movies/{movieId}/emotions : Can post emotions from the user to the movie
+   e.g http://localhost:5262/api/movies/550/emotions
    request {
    userId: "string",
    emotion: "string"
    }
    response: movieId, emotionState, userEmotion
+
 5. GET /api/emotions : lists all the available emotions
+   e.g http://localhost:5262/api/emotions
+
+6. GET api/movies/{movieId}/users : lists all the users who left the emotions on movie
+   e.g http://localhost:5262/api/movies/550/users
 
 ## Optional enhancement
 
