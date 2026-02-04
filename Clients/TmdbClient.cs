@@ -42,7 +42,7 @@ namespace Clients
         public async Task<TmdbDiscoverResponse> GetMoviesByGenreAsync(int genreId)
         {
             return await GetAsync<TmdbDiscoverResponse>(
-                $"{_options.BaseUrl}discover/movie?with_genres={genreId}"
+                $"discover/movie?with_genres={genreId}"
                 ,"Get Genre"
             );
         }
@@ -50,7 +50,7 @@ namespace Clients
         public async Task<TmdbMovieDetailResponse> GetMovieDetailsByIdAsync(int movieId)
         {
             return await GetAsync<TmdbMovieDetailResponse>(
-                $"{_options.BaseUrl}movie/{movieId}?",
+                $"movie/{movieId}?",
                 "Get Movie Details"
             );
         }
@@ -58,7 +58,7 @@ namespace Clients
         public async Task<TmdbDiscoverResponse> GetMovieRecommendationsAsync(int movieId)
         {
             return await GetAsync<TmdbDiscoverResponse>(
-                $"{_options.BaseUrl}movie/{movieId}/recommendations?",
+                $"movie/{movieId}/recommendations?",
                 "Get Movie Recommendations"
             );
         }
