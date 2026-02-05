@@ -99,3 +99,5 @@ public class TmdbOptions
   instead of fetching one genre "scifi", extended the api functionality to whole genre that TMDb supports.
 - MovieDetails/MovieSummaryDto inherits Movie
 - Genre class
+
+-- this branch is for the review
