@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 namespace Models
+//review
 {
     [JsonConverter(typeof(JsonStringEnumConverter))] //shows string on JSON
     public enum EmotionType
