@@ -4,6 +4,8 @@ using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using Clients;
 //review
+// BC: Middleware and services are registered properly
+// Excellent use of middleware for exception handling
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<TmdbOptions>(

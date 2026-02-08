@@ -2,6 +2,7 @@ using Models;
 using System.Text.Json.Serialization;
 namespace DTOs
 //review
+// BC: Good Used of Enum Converter for UserEmotion
 {
     public class EmotionStateDto
     {

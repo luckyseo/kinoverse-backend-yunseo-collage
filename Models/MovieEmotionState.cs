@@ -1,6 +1,8 @@
 
 using DTOs;
 //review
+// BC: you can probably use reflection to get all EmotionType values instead of hardcoding them for initialization
+// But this is fine for now, just something to consider for scalability
 namespace Models
 {
     public class MovieEmotionState

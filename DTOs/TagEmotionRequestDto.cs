@@ -1,6 +1,7 @@
 using Models;
 using System.Text.Json.Serialization;
 //review
+// BC: not much to say here, straightforward DTO for tagging emotion
 namespace DTOs
 {
 //     { example request body

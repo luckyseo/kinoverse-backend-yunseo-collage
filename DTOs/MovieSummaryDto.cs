@@ -2,6 +2,13 @@ using System.Text.Json.Serialization;
 using Models;
 namespace DTOs
 //review
+// BC: Consider Splitting the EmotionSummary and TopEmotion classes into separate files for better organization
+// Imagine this, what would happen if we have more emotion-related DTOs in the future?
+// Or even different uses like, say, a genre emotion summary?
+// Just a thought for scalability and maintainability
+// Based on current scope, it functions as intended
+//
+// Other than that, the MovieSummaryDto looks well structured and clear
 {
     public class MovieSummaryDto : Movie
     {

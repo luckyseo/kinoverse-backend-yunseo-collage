@@ -2,6 +2,8 @@ using Models;
 using DTOs;
 using System.Threading.Tasks;
 //review
+// BC: Interface functions are defined well according to the required endpoints
+// it is fit for purpose and clear in its intent
 namespace Collage.Backend.Induction.Starter.Services
 {
     /*

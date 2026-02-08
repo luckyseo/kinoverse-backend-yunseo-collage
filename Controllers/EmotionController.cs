@@ -3,6 +3,9 @@ using Collage.Backend.Induction.Starter.Services;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 //review
+// BC: Controllers look neatly implemented. clear routing and response types. Good job on validation for genre and emotion types.
+// Strictly for endpoints, logic is done inside services with minimal logic in controllers which is good practice.
+//
 namespace Collage.Backend.Induction.Starter.Controllers
 {
     /*

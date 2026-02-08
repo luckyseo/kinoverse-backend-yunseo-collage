@@ -1,6 +1,10 @@
 using Models;
 using System.Text.Json.Serialization;
 //review
+// BC: Generally you don't really need a DTO constructor
+// This is because DTOs are often used with serialization libraries
+// They are only used to transfer data, so having parameterless constructors is usually sufficient
+// However, it's still ok if you have it
 namespace DTOs
 {
     /*

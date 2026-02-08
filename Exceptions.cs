@@ -1,6 +1,9 @@
 using System.Net;
 using System.Text.Json;
 //review
+// BC: I just wanna say, Well done on the exception middleware! It keeps your code clean and ensures consistent error responses. Nice job!
+// Ideally you might want to put the emotion exception in its own file, but for this small project it's fine here.
+//
 public class Exceptions
 {
     private readonly RequestDelegate _next;
