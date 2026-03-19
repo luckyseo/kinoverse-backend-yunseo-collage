@@ -94,6 +94,10 @@ public class TmdbOptions
 
 ## Optional enhancement
 
-- Utilised middleware instead of writing mutiple try & catch
+- app.UseMiddleware<Exceptions>(); -> Utilised middleware instead of writing mutiple try & catch
 - api/movies/scifi -> api/movies/{genre}
   instead of fetching one genre "scifi", extended the api functionality to whole genre that TMDb supports.
+- MovieDetails/MovieSummaryDto inherits Movie
+- Genre class
+
+-- this branch is for the //review

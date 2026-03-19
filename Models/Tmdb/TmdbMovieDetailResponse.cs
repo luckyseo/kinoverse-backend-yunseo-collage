@@ -1,5 +1,9 @@
 using System.Text.Json.Serialization;
 using Models;
+//review
+// BC: TMDB Movie Detail Response model Maps properly
+// Well defined properties with JsonPropertyName attributes for accurate serialization
+// Would maybe split TMDBGenre into its own file for larger projects but fine here
 namespace Models.Tmdb
 {
     public class TmdbMovieDetailResponse

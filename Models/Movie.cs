@@ -1,4 +1,6 @@
 namespace Models
+//review
+// BC: Movie model looks good, with proper handling of ReleaseYear parsing
 {
     public class Movie{
         

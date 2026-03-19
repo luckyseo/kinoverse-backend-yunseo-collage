@@ -10,6 +10,15 @@ using System.Collections.Concurrent;
 using Sprache;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Routing.Constraints;
+//review
+// BC: Memory Cache Implementation looks solid
+// Nice use of Max and LINQ for emotion queries
+//
+// For AddEmotionToMovieAsync, I would personally separate out the logic into smaller private methods for readability and maintainability
+// ie: have private UpdateEmotionCounts maybe even a separate ClearCacheForMovie method
+// 
+// Overall, well structured and meets requirements effectively
+//
 namespace Collage.Backend.Induction.Starter.Services
 {
     public class MoviesService :IMovieService

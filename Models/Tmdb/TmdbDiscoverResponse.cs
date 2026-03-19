@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-
+//review
+// BC: TMDB Discover Response model Maps properly
+// Well defined properties with JsonPropertyName attributes for accurate serialization
 namespace Models.Tmdb
 {
     public class TmdbDiscoverResponse

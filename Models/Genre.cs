@@ -1,4 +1,7 @@
 using System.Runtime.Serialization;
+//review
+// BC: This is also food for thought, but have you considered caching the genres based on your searches as well?
+// This could help build up the genre dictionary for subsequent queries without needing to hardcode them all here
 
 namespace Models
 {

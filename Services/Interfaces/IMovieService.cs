@@ -3,6 +3,9 @@ using Models;
 using System.Threading.Tasks;
 using DTOs;
 using System.Collections.Concurrent;
+//review
+// BC: Interface functions are defined well according to the required endpoints
+// it is fit for purpose and clear in its intent
 namespace Collage.Backend.Induction.Starter.Services
 {
 //     GET /api/movies/scifi - movie summaries
